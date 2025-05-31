@@ -5,23 +5,23 @@ import (
 	"sync"
 )
 
-// loggedSyncRWMutex is a mutex that logs its actions.
+// LoggedSyncRWMutex is a mutex that logs its actions.
 // It wraps sync.Mutex and sync.RWMutex to provide logging for lock and unlock actions.
 // This is useful for debugging and tracking mutex usage in concurrent applications.
 // It can be used in place of sync.RWMutex.
 // Usage:
 // import : "github.com/go-while/go-loggedrwmutex"
 //
-//	    var mux *loggedrwmutex.loggedSyncRWMutex
-//		mux := &loggedrwmutex.loggedSyncRWMutex{Name: "XXYYZZ" }'
+//	    var mux *loggedrwmutex.LoggedSyncRWMutex
+//		mux := &loggedrwmutexLoggedSyncRWMutex{Name: "XXYYZZ" }'
 //		item.mux = mux
 //		item.mux.Lock()           // locks the mutex
 //		item.mux.Unlock()         // unlocks the mutex
 //		item.mux.RLock()          // acquires a read lock
 //		item.mux.RUnlock()        // releases a read lock
 //		locked, rlocked := item.mux.Status() // checks the status of the mutex
-type loggedSyncRWMutex struct {
-	mu             sync.RWMutex // internal mutex to protect the state of the loggedSyncRWMutex
+type LoggedSyncRWMutex struct {
+	mu             sync.RWMutex // internal mutex to protect the state of the LoggedSyncRWMutex
 	Name           string
 	lockedCount    uint64 // number of active locks
 	rLockedCount   uint64 // number of active readers
@@ -33,7 +33,7 @@ type loggedSyncRWMutex struct {
 }
 
 // Status prints the current status of the mutex, including whether it is locked or read-locked.
-func (m *loggedSyncRWMutex) PrintStatus(forceprint bool) (locked bool, rlocked bool) {
+func (m *LoggedSyncRWMutex) PrintStatus(forceprint bool) (locked bool, rlocked bool) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	if m.lockedCount > 0 || m.rLockedCount > 0 || forceprint {
@@ -42,7 +42,7 @@ func (m *loggedSyncRWMutex) PrintStatus(forceprint bool) (locked bool, rlocked b
 	return
 }
 
-func (m *loggedSyncRWMutex) Lock() {
+func (m *LoggedSyncRWMutex) Lock() {
 	m.mu.Lock()
 	m.lockedCount++
 	m.totalLocked++
@@ -51,7 +51,7 @@ func (m *loggedSyncRWMutex) Lock() {
 	m.RWMutex.Lock()
 }
 
-func (m *loggedSyncRWMutex) Unlock() {
+func (m *LoggedSyncRWMutex) Unlock() {
 	m.RWMutex.Unlock()
 
 	m.mu.Lock()
@@ -60,7 +60,7 @@ func (m *loggedSyncRWMutex) Unlock() {
 	m.mu.Unlock()
 }
 
-func (m *loggedSyncRWMutex) RLock() {
+func (m *LoggedSyncRWMutex) RLock() {
 	m.mu.Lock()
 	m.rLockedCount++
 	m.totalrLocked++
@@ -69,7 +69,7 @@ func (m *loggedSyncRWMutex) RLock() {
 	m.RWMutex.RLock()
 }
 
-func (m *loggedSyncRWMutex) RUnlock() {
+func (m *LoggedSyncRWMutex) RUnlock() {
 	m.RWMutex.RUnlock()
 
 	m.mu.Lock()
