@@ -41,13 +41,13 @@ func main() {
 
 ## API Reference
 
-### `loggedSyncRWMutex`
+### `LoggedSyncRWMutex`
 
 A struct that wraps `sync.RWMutex` and adds logging capabilities.
 
 ```go
-type loggedSyncRWMutex struct {
-	mu             sync.RWMutex // internal mutex to protect the state of the loggedSyncRWMutex
+type LoggedSyncRWMutex struct {
+	mu             sync.RWMutex // internal mutex to protect the state of the LoggedSyncRWMutex
 	Name           string
 	lockedCount    uint64 // number of active locks
 	rLockedCount   uint64 // number of active readers
@@ -107,7 +107,7 @@ import (
 )
 
 func main() {
-	mux := &loggedrwmutex.loggedSyncRWMutex{Name: "ResourceMutex"}
+	mux := &loggedrwmutex.LoggedSyncRWMutex{Name: "ResourceMutex"}
 
 	go func() {
 		mux.Lock()
