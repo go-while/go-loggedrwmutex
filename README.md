@@ -22,7 +22,7 @@ import "github.com/go-while/go-loggedrwmutex"
 
 func main() {
     // Initialize the logged RWMutex with a name
-    mux := &loggedrwmutex.loggedSyncRWMutex{Name: "MyMutex"}
+    mux := &loggedrwmutex.LoggedSyncRWMutex{Name: "MyMutex"}
 
     // Lock and unlock for exclusive access
     mux.Lock()
