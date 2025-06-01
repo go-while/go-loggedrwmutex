@@ -21,7 +21,7 @@ func main() {
 		defer wg.Done()
 		i := 0
 		for {
-			if i > tmax {
+			if i >= tmax {
 				break
 			}
 			mux.Lock()
@@ -37,7 +37,7 @@ func main() {
 		defer wg.Done()
 		i := 0
 		for {
-			if i > tmax {
+			if i >= tmax {
 				break
 			}
 			mux.RLock()
@@ -53,7 +53,7 @@ func main() {
 		defer wg.Done()
 		i := 0
 		for {
-			if i > tmax {
+			if i >= tmax {
 				break
 			}
 			mux.RLock()
@@ -69,12 +69,18 @@ func main() {
 		defer wg.Done()
 		i := 0
 		for {
-			if i > tmax {
+			if i >= tmax {
 				break
 			}
+			mux.Lock()
+			time.Sleep(time.Duration(rand.Intn(10)) * time.Microsecond)
+			mux.Unlock()
+
 			mux.PrintStatus(true)
 			i++
 		}
 	}()
-	wg.Wait()
+
+	wg.Wait() // Wait for all goroutines to finish
+	mux.PrintStatus(true)
 }

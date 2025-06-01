@@ -2,7 +2,6 @@ package loggedrwmutex
 
 import (
 	"fmt"
-	"log"
 	"sync"
 )
 
@@ -53,7 +52,7 @@ func (m *LoggedSyncRWMutex) PrintStatus(forceprint bool) (locked bool, rlocked b
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	if m.lockedCount > 0 || m.rLockedCount > 0 || forceprint {
-		log.Printf("?? [loggedMUTEX] Status '%s' locked=%d, rLocked=%d totalLocked/totalUnlocked=%d/%d totalrLocked/totalrUnlocked=%d/%d", m.Name, m.lockedCount, m.rLockedCount, m.totalLocked, m.totalUnlocked, m.totalrLocked, m.totalrUnlocked)
+		fmt.Printf("?? [loggedMUTEX] Status '%s' locked=%d, rLocked=%d totalLocked/totalUnlocked=%d/%d totalrLocked/totalrUnlocked=%d/%d\n", m.Name, m.lockedCount, m.rLockedCount, m.totalLocked, m.totalUnlocked, m.totalrLocked, m.totalrUnlocked)
 	}
 	return
 }
