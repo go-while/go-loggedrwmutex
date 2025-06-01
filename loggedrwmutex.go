@@ -1,6 +1,7 @@
 package loggedrwmutex
 
 import (
+	"fmt"
 	"log"
 	"sync"
 )
@@ -23,6 +24,11 @@ import (
 type LoggedSyncRWMutex struct {
 	mu             sync.RWMutex // internal mutex to protect the state of the LoggedSyncRWMutex
 	Name           string
+	DebugAll       bool   // if true, will print debug messages
+	DebugLock      bool   // if true, will print debug messages
+	DebugUnlock    bool   // if true, will print debug messages
+	DebugRLock     bool   // if true, will print debug messages
+	DebugRUnlock   bool   // if true, will print debug messages
 	lockedCount    uint64 // number of active locks
 	rLockedCount   uint64 // number of active readers
 	totalLocked    uint64
@@ -47,7 +53,9 @@ func (m *LoggedSyncRWMutex) Lock() {
 	m.lockedCount++
 	m.totalLocked++
 	m.mu.Unlock()
-
+	if DebugLock || DebugAll {
+		fmt.Printf("[loggedMUTEX] Lock '%s' locked=%d/%d\n", m.Name, m.lockedCount, m.totalLocked)
+	}
 	m.RWMutex.Lock()
 }
 
@@ -57,6 +65,9 @@ func (m *LoggedSyncRWMutex) Unlock() {
 	m.mu.Lock()
 	m.lockedCount--
 	m.totalUnlocked++
+	if DebugUnlock || DebugAll {
+		fmt.Printf("[loggedMUTEX] Unlock '%s' locked=%d/%d\n", m.Name, m.lockedCount, m.totalUnlocked)
+	}
 	m.mu.Unlock()
 }
 
@@ -64,6 +75,9 @@ func (m *LoggedSyncRWMutex) RLock() {
 	m.mu.Lock()
 	m.rLockedCount++
 	m.totalrLocked++
+	if DebugRLock || DebugAll {
+		fmt.Printf("[loggedMUTEX] RLock '%s' rLocked=%d/%d\n", m.Name, m.rLockedCount, m.totalrLocked)
+	}
 	m.mu.Unlock()
 
 	m.RWMutex.RLock()
@@ -75,5 +89,8 @@ func (m *LoggedSyncRWMutex) RUnlock() {
 	m.mu.Lock()
 	m.rLockedCount--
 	m.totalrUnlocked++
+	if DebugRUnlock || DebugAll {
+		fmt.Printf("[loggedMUTEX] RUnlock '%s' rLockedCount=%d/%d\n", m.Name, m.rLockedCount, m.totalrUnlocked)
+	}
 	m.mu.Unlock()
 }
