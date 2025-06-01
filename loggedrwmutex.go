@@ -6,6 +6,8 @@ import (
 	"sync"
 )
 
+var GlobalDebug = false // global debug flag for all mutexes
+
 // LoggedSyncRWMutex is a mutex that logs its actions.
 // It wraps sync.Mutex and sync.RWMutex to provide logging for lock and unlock actions.
 // This is useful for debugging and tracking mutex usage in concurrent applications.
@@ -58,7 +60,7 @@ func (m *LoggedSyncRWMutex) Lock() {
 	m.lockedCount++
 	m.totalLocked++
 	m.mu.Unlock()
-	if m.DebugLock || m.DebugAll {
+	if m.DebugLock || m.DebugAll || GlobalDebug {
 		fmt.Printf("[loggedMUTEX] Lock '%s' locked=%d/%d\n", m.Name, m.lockedCount, m.totalLocked)
 	}
 	m.RWMutex.Lock()
@@ -70,7 +72,7 @@ func (m *LoggedSyncRWMutex) Unlock() {
 	m.mu.Lock()
 	m.lockedCount--
 	m.totalUnlocked++
-	if m.DebugUnlock || m.DebugAll {
+	if m.DebugUnlock || m.DebugAll || GlobalDebug {
 		fmt.Printf("[loggedMUTEX] Unlock '%s' locked=%d/%d\n", m.Name, m.lockedCount, m.totalUnlocked)
 	}
 	m.mu.Unlock()
@@ -80,7 +82,7 @@ func (m *LoggedSyncRWMutex) RLock() {
 	m.mu.Lock()
 	m.rLockedCount++
 	m.totalrLocked++
-	if m.DebugRLock || m.DebugAll {
+	if m.DebugRLock || m.DebugAll || GlobalDebug {
 		fmt.Printf("[loggedMUTEX] RLock '%s' rLocked=%d/%d\n", m.Name, m.rLockedCount, m.totalrLocked)
 	}
 	m.mu.Unlock()
@@ -94,7 +96,7 @@ func (m *LoggedSyncRWMutex) RUnlock() {
 	m.mu.Lock()
 	m.rLockedCount--
 	m.totalrUnlocked++
-	if m.DebugRUnlock || m.DebugAll {
+	if m.DebugRUnlock || m.DebugAll || GlobalDebug {
 		fmt.Printf("[loggedMUTEX] RUnlock '%s' rLockedCount=%d/%d\n", m.Name, m.rLockedCount, m.totalrUnlocked)
 	}
 	m.mu.Unlock()
