@@ -10,8 +10,10 @@ import (
 )
 
 func main() {
-	mux := &loggedrwmutex.LoggedSyncRWMutex{Name: "ResourceMutex"}
-	mux.DebugAll = true // Enable all debug messages
+	mux := &loggedrwmutex.LoggedSyncRWMutex{
+		Name:     "ResourceMutex",
+		DebugAll: true,
+	}
 	tmax := 10000
 	var wg sync.WaitGroup
 	wg.Add(4)
