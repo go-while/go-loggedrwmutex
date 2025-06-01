@@ -23,10 +23,17 @@ go get github.com/go-while/go-loggedrwmutex
 import "github.com/go-while/go-loggedrwmutex"
 
 func init() {
-	// Any Debug flags can only be set on boot time / before initializing any mutexes
-	// or you may get data race errors. this is a non fix as this package is only for debugging purposes.
-	loggedrwmutex.GlobalDebug = true // Enable global debug messages for all mutexes
-	loggedrwmutex.DisableLogging = false // global flag to disable logging and bypass directly to original mutexes without counting
+	// Any Debug flags can only be set on boot time
+	//  before initializing any mutexes!
+	// or you may get data race errors.
+	// this is a non fix as this package is only for debugging purposes.
+
+	// Enable global debug messages for all mutexes
+	loggedrwmutex.GlobalDebug = true
+
+	// global flag to disable logging
+	// and bypass directly to original mutexes without counting
+	loggedrwmutex.DisableLogging = false
 }
 
 func main() {
