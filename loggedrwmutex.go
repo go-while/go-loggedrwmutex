@@ -59,10 +59,11 @@ func (m *LoggedSyncRWMutex) Lock() {
 	m.mu.Lock()
 	m.lockedCount++
 	m.totalLocked++
-	m.mu.Unlock()
 	if m.DebugLock || m.DebugAll || GlobalDebug {
 		fmt.Printf("[loggedMUTEX] Lock '%s' locked=%d/%d\n", m.Name, m.lockedCount, m.totalLocked)
 	}
+	m.mu.Unlock()
+
 	m.RWMutex.Lock()
 }
 
