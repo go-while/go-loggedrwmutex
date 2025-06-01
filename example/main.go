@@ -2,15 +2,17 @@ package main
 
 import (
 	"fmt"
-	"github.com/go-while/go-loggedrwmutex"
-	"time"
+	"math/rand"
 	"sync"
+	"time"
+
+	"github.com/go-while/go-loggedrwmutex"
 )
 
 func main() {
 	mux := &loggedrwmutex.LoggedSyncRWMutex{Name: "ResourceMutex"}
 	mux.DebugAll = true // Enable all debug messages
-	tmax := 1000
+	tmax := 10000
 	var wg sync.WaitGroup
 	wg.Add(4)
 	go func() {
@@ -22,7 +24,7 @@ func main() {
 			}
 			mux.Lock()
 			fmt.Println("Writer: Acquired lock")
-			time.Sleep(1 * time.Millisecond)
+			time.Sleep(time.Duration(rand.Intn(10)) * time.Microsecond)
 			fmt.Println("Writer: Releasing lock")
 			mux.Unlock()
 			i++
@@ -38,7 +40,7 @@ func main() {
 			}
 			mux.RLock()
 			fmt.Println("Reader 1: Acquired read lock")
-			time.Sleep(1 * time.Millisecond)
+			time.Sleep(time.Duration(rand.Intn(10)) * time.Microsecond)
 			fmt.Println("Reader 1: Releasing read lock")
 			mux.RUnlock()
 			i++
@@ -54,7 +56,7 @@ func main() {
 			}
 			mux.RLock()
 			fmt.Println("Reader 2: Acquired read lock")
-			time.Sleep(1 * time.Millisecond)
+			time.Sleep(time.Duration(rand.Intn(10)) * time.Microsecond)
 			fmt.Println("Reader 2: Releasing read lock")
 			mux.RUnlock()
 			i++
@@ -72,5 +74,5 @@ func main() {
 			i++
 		}
 	}()
-	wg .Wait()
+	wg.Wait()
 }
