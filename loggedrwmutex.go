@@ -58,7 +58,7 @@ func (m *LoggedSyncRWMutex) Lock() {
 	m.lockedCount++
 	m.totalLocked++
 	m.mu.Unlock()
-	if DebugLock || DebugAll {
+	if m.DebugLock || m.DebugAll {
 		fmt.Printf("[loggedMUTEX] Lock '%s' locked=%d/%d\n", m.Name, m.lockedCount, m.totalLocked)
 	}
 	m.RWMutex.Lock()
@@ -70,7 +70,7 @@ func (m *LoggedSyncRWMutex) Unlock() {
 	m.mu.Lock()
 	m.lockedCount--
 	m.totalUnlocked++
-	if DebugUnlock || DebugAll {
+	if m.DebugUnlock || m.DebugAll {
 		fmt.Printf("[loggedMUTEX] Unlock '%s' locked=%d/%d\n", m.Name, m.lockedCount, m.totalUnlocked)
 	}
 	m.mu.Unlock()
@@ -80,7 +80,7 @@ func (m *LoggedSyncRWMutex) RLock() {
 	m.mu.Lock()
 	m.rLockedCount++
 	m.totalrLocked++
-	if DebugRLock || DebugAll {
+	if m.DebugRLock || m.DebugAll {
 		fmt.Printf("[loggedMUTEX] RLock '%s' rLocked=%d/%d\n", m.Name, m.rLockedCount, m.totalrLocked)
 	}
 	m.mu.Unlock()
@@ -94,7 +94,7 @@ func (m *LoggedSyncRWMutex) RUnlock() {
 	m.mu.Lock()
 	m.rLockedCount--
 	m.totalrUnlocked++
-	if DebugRUnlock || DebugAll {
+	if m.DebugRUnlock || m.DebugAll {
 		fmt.Printf("[loggedMUTEX] RUnlock '%s' rLockedCount=%d/%d\n", m.Name, m.rLockedCount, m.totalrUnlocked)
 	}
 	m.mu.Unlock()
