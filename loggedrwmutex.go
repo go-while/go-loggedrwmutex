@@ -15,6 +15,9 @@ var GlobalDebug = false // global debug flag for all mutexes
 // Usage:
 // import : "github.com/go-while/go-loggedrwmutex"
 //
+//		func init() {
+//			loggedrwmutex.GlobalDebug = true // enables global debug messages for all mutexes}
+//		}
 //	    var mux *loggedrwmutex.LoggedSyncRWMutex
 //		mux := &loggedrwmutexLoggedSyncRWMutex{Name: "XXYYZZ" }'
 //		item.mux = mux
