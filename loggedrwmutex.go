@@ -16,11 +16,16 @@ import (
 //	    var mux *loggedrwmutex.LoggedSyncRWMutex
 //		mux := &loggedrwmutexLoggedSyncRWMutex{Name: "XXYYZZ" }'
 //		item.mux = mux
+//		item.mux.DebugAll = true // enables all debug messages
+//		item.mux.DebugLock = true // enables debug messages for Lock
+//		item.mux.DebugUnlock = true // enables debug messages for Unlock
+//		item.mux.DebugRLock = true // enables debug messages for RLock
+//		item.mux.DebugRUnlock = true // enables debug messages for RUnlock
 //		item.mux.Lock()           // locks the mutex
 //		item.mux.Unlock()         // unlocks the mutex
 //		item.mux.RLock()          // acquires a read lock
 //		item.mux.RUnlock()        // releases a read lock
-//		locked, rlocked := item.mux.Status() // checks the status of the mutex
+//		locked, rlocked := item.mux.Status(true) // checks the status of the mutex
 type LoggedSyncRWMutex struct {
 	mu             sync.RWMutex // internal mutex to protect the state of the LoggedSyncRWMutex
 	Name           string
